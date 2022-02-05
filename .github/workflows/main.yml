@@ -1,4 +1,4 @@
-name: Deploy
+name: Pipeline
 
 on: 
   push:
@@ -6,6 +6,31 @@ on:
     - main
 
 jobs:
+  black-lint:
+    name: black
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: piotrpawlaczek/python-blacken@release/stable
+        with:
+          path: '.'
+          sanity-check: 'safe'
+          only-check: 'yes'
+
+  flake8-lint:
+    name: flake8
+    needs: black-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v2
+      - name: Set up Python environment
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.8"
+      - name: flake8 Lint
+        uses: py-actions/flake8@v2
+
   deploy_lambda:
     runs-on: ubuntu-latest
     steps:
