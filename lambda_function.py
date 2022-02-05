@@ -26,5 +26,13 @@ def validateJSON(json_str):
 def lambda_handler(event, context):
     # Ergebnis ausgeben
     result = validateJSON(event["body"])
-    error_txt = "JSON ist korrekt"
-    return {"statusCode": 200, "body": error_txt}
+    status = 200
+    status_txt = "JSON ist korrekt"
+    if(result == 1):
+        status = 400
+        status_txt = "JSON ist nicht valide"
+    elif(result == 2):
+        status = 400
+        status_txt = "JSON darf nur zweidimensional sein"
+
+    return {"statusCode": status, "body": status_txt}
