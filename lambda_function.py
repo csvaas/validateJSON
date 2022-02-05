@@ -19,7 +19,7 @@ f = open("testdata.json")  # Korrekt
 # Prüfen, ob JSON korrekt ist
 try:
     jfile = json.load(f)
-except ValueError as e:
+except ValueError:
     error = 1
 if error == 0:
     # Prüfen, ob JSON eine tiefe von 2 hat
