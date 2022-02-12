@@ -1,5 +1,9 @@
 import json
 
+JSON_SUCCES = "JSON ist korrekt"
+JSON_NOT_VALID = "JSON ist nicht valide"
+JSON_DEPTH_ERROR = "JSON muss zweidimensional sein"
+
 
 def depth(x):
     if type(x) is dict and x:
@@ -27,13 +31,16 @@ def lambda_handler(event, context):
     # Ergebnis ausgeben
     result = validateJSON(event["JSON"])
     status = 200
-    status_txt = "JSON ist korrekt"
+    status_txt = JSON_SUCCES
     if result == 1:
         status = 400
-        status_txt = "JSON ist nicht valide"
+        status_txt = JSON_NOT_VALID
     elif result == 2:
         status = 400
-        status_txt = "JSON darf nur zweidimensional sein"
+        status_txt = JSON_DEPTH_ERROR
+
+    # AWS CloudWatch Logging
     print(status)
     print(status_txt)
+
     return {"statusCode": status, "statusTxt": status_txt}
