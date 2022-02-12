@@ -34,4 +34,6 @@ def lambda_handler(event, context):
     elif result == 2:
         status = 400
         status_txt = "JSON darf nur zweidimensional sein"
+    print(status)
+    print(status_txt)
     return {"statusCode": status, "statusTxt": status_txt}
