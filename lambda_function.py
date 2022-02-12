@@ -25,7 +25,7 @@ def validateJSON(json_str):
 
 def lambda_handler(event, context):
     # Ergebnis ausgeben
-    result = validateJSON(event["body"])
+    result = validateJSON(event["JSON"])
     status = 200
     status_txt = "JSON ist korrekt"
     if result == 1:
