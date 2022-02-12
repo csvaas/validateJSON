@@ -9,27 +9,29 @@ def depth(x):
     return 0
 
 
-error = 0
+def validateJSON(json_str):
+    # Prüfen, ob JSON korrekt ist
+    error = 0
+    try:
+        jfile = json.loads(json_str)
+    except ValueError:
+        error = 1
+    if error == 0:
+        # Prüfen, ob JSON eine tiefe von 2 hat
+        if depth(jfile) != 2:
+            error = 2
+    return error
 
-# JSON einlesen
-# f = open("deep.json")       #Fehler nicht zweidimensional
-# f = open("test.json")       #Fehler nicht valide
-f = open("testdata.json")  # Korrekt
 
-# Prüfen, ob JSON korrekt ist
-try:
-    jfile = json.load(f)
-except ValueError:
-    error = 1
-if error == 0:
-    # Prüfen, ob JSON eine tiefe von 2 hat
-    if depth(jfile) != 2:
-        error = 2
-
-# Ergebnis ausgeben
-if error == 0:
-    print("JSON ist korrekt")
-elif error == 1:
-    print("JSON ist nicht valide")
-elif error == 2:
-    print("JSON darf nur zweidimensional sein")
+def lambda_handler(event, context):
+    # Ergebnis ausgeben
+    result = validateJSON(event["body"])
+    status = 200
+    status_txt = "JSON ist korrekt"
+    if result == 1:
+        status = 400
+        status_txt = "JSON ist nicht valide"
+    elif result == 2:
+        status = 400
+        status_txt = "JSON darf nur zweidimensional sein"
+    return {"statusCode": status, "body": status_txt}
